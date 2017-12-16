@@ -22,10 +22,7 @@
         [HttpGet]
         public IActionResult GetAll()
         {
-            IEnumerable<PostModel> list = this.repo.Posts.Take(3);
-            return this.Json(list);
-
-            // return Json("XDD");
+            return this.Json(this.repo.Posts);
         }
     }
 }

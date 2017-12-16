@@ -1,12 +1,14 @@
 ﻿namespace UzywaneKsiazki.Models.Repository
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using UzywaneKsiazki.Models.DomainModels;
 
     public class EFPostsRepository : IPostRepository
     {
-        private readonly ApplicationDbContext context;
+        private ApplicationDbContext context;
 
         public EFPostsRepository(ApplicationDbContext context)
         {

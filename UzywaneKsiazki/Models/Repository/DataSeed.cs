@@ -11,13 +11,15 @@
 
     public class DataSeed
     {
+        // populate localdb
         public static void Populate(IApplicationBuilder app)
         {
+            // todo remove
             ApplicationDbContext context = app.ApplicationServices.GetRequiredService<ApplicationDbContext>();
             context.Database.Migrate();
             if (!context.Posts.Any())
             {
-                context.Posts.AddRange(
+                context.Posts.Add(
                     new PostModel
                     {
                         Adress = "ul.Torowa 21",
@@ -37,6 +39,7 @@
                         Telephone = "658752122",
                         Title = "Na krańce świata. Podróż historyka przez historię"
                     });
+                context.SaveChanges();
             }
         }
     }
