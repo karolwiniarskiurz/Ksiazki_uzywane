@@ -24,5 +24,11 @@
         {
             return this.Json(this.repo.Posts);
         }
+
+        [HttpGet("{title}")]
+        public IActionResult GetByTitle(string title)
+        {
+            return this.Json(this.repo.GetByTitle(title));
+        }
     }
 }

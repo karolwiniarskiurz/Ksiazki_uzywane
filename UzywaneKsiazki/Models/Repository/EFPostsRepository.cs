@@ -16,5 +16,10 @@
         }
 
         public IQueryable<PostModel> Posts => this.context.Posts;
+
+        public IEnumerable<PostModel> GetAll() => this.Posts;
+
+        //todo zrob lepsze query
+        public IEnumerable<PostModel> GetByTitle(string title) => this.Posts.Where(p => p.Title.Contains(title));
     }
 }

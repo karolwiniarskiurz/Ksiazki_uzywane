@@ -14,7 +14,6 @@
         // populate localdb
         public static void Populate(IApplicationBuilder app)
         {
-            // todo remove
             ApplicationDbContext context = app.ApplicationServices.GetRequiredService<ApplicationDbContext>();
             context.Database.Migrate();
             if (!context.Posts.Any())

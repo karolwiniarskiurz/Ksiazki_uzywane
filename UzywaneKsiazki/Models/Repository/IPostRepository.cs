@@ -8,5 +8,9 @@ namespace UzywaneKsiazki.Models.Repository
     public interface IPostRepository
     {
         IQueryable<PostModel> Posts { get; }
+
+        IEnumerable<PostModel> GetAll();
+
+        IEnumerable<PostModel> GetByTitle(string title);
     }
 }
