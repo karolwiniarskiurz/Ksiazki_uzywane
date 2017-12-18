@@ -6,11 +6,11 @@
 
     using UzywaneKsiazki.Models.DomainModels;
 
-    public class EFPostsRepository : IPostRepository
+    public class EfPostsRepository : IPostRepository
     {
         private ApplicationDbContext context;
 
-        public EFPostsRepository(ApplicationDbContext context)
+        public EfPostsRepository(ApplicationDbContext context)
         {
             this.context = context;
         }
@@ -19,7 +19,17 @@
 
         public IEnumerable<PostModel> GetAll() => this.Posts;
 
-        //todo zrob lepsze query
+        // todo zrob lepsze query
         public IEnumerable<PostModel> GetByTitle(string title) => this.Posts.Where(p => p.Title.Contains(title));
+
+        public void AddPost(PostModel post) => this.context.Add(post);
+
+        public void DeletePost(Guid id)
+        {
+            var post = this.Posts.Where(p => p.Id == id);
+            this.context.Remove(post);
+        }
+
+        public void UpdatePost(PostModel post) => this.context.Update(post);
     }
 }

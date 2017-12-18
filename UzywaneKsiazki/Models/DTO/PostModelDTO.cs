@@ -1,11 +1,9 @@
-﻿namespace UzywaneKsiazki.Models.DomainModels
-{
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 
-    public class PostModel
+namespace UzywaneKsiazki.Models.DTO
+{
+    public class PostModelDTO
     {
-        //todo moze zrob construktor i walidacje ale to gdzies pozniej XD
         public Guid Id { get; set; }
 
         public string AuthorName { get; set; }
@@ -14,18 +12,9 @@
 
         public string Telephone { get; set; }
 
-        // todo moze to bardziej rozbudowac ale nie wiem w sumie 
         public string Adress { get; set; }
 
-        public string PhotosDb { get; set; }
-
-        [NotMapped]
-        public string[] Photos
-        {
-            get => this.PhotosDb.Split(';');
-
-            set => this.PhotosDb = string.Join(';', value);
-        }
+        public string[] Photos { get; set; }
 
         public string Title { get; set; }
 

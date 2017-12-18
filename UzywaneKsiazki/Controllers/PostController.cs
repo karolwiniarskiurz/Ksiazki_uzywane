@@ -8,27 +8,28 @@
 
     using UzywaneKsiazki.Models.DomainModels;
     using UzywaneKsiazki.Models.Repository;
+    using UzywaneKsiazki.Models.Services;
 
     [Route("[controller]")]
     public class PostController : Controller
     {
-        private IPostRepository repo;
+        private IPostService service;
 
-        public PostController(IPostRepository repo)
+        public PostController(IPostService service)
         {
-            this.repo = repo;
+            this.service = service;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return this.Json(this.repo.Posts);
+            return this.Json(this.service.GetAll());
         }
 
         [HttpGet("{title}")]
         public IActionResult GetByTitle(string title)
         {
-            return this.Json(this.repo.GetByTitle(title));
+            return this.Json(this.service.GetByTitle(title));
         }
     }
 }
