@@ -5,11 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace UzywaneKsiazki
 {
+    using AutoMapper;
+
     using Microsoft.EntityFrameworkCore;
 
     using Newtonsoft.Json;
 
+    using UzywaneKsiazki.Models.Mapper;
     using UzywaneKsiazki.Models.Repository;
+    using UzywaneKsiazki.Models.Services;
 
     public class Startup
     {
@@ -28,9 +32,15 @@ namespace UzywaneKsiazki
                 options => options.UseSqlServer(this.Configuration["Data:KsiazkiPosts:ConnectionString"]));
 
             // IoC IRepository -> EFRepository
-            services.AddTransient<IPostRepository, EFPostsRepository>();
-            services.AddMvc().AddJsonOptions(x => x.SerializerSettings.Formatting = Formatting.Indented);
+            services.AddTransient<IPostRepository, EfPostsRepository>();
 
+            // IoC IPostService -> PostService
+            services.AddTransient<IPostService, PostService>();
+
+            // AutoMapper
+            services.AddAutoMapper();
+
+            services.AddMvc().AddJsonOptions(x => x.SerializerSettings.Formatting = Formatting.Indented);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

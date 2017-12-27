@@ -2,9 +2,11 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Text;
 
     public class PostModel
     {
+        // todo moze zrob construktor i walidacje ale to gdzies pozniej XD
         public Guid Id { get; set; }
 
         public string AuthorName { get; set; }
@@ -26,6 +28,8 @@
             set => this.PhotosDb = string.Join(';', value);
         }
 
+        public string SearchTags { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -37,5 +41,7 @@
         public string PublishDate { get; set; }
 
         public decimal? Price { get; set; }
+
+
     }
 }

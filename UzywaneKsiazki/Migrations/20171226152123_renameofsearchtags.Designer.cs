@@ -11,9 +11,10 @@ using UzywaneKsiazki.Models.Repository;
 namespace UzywaneKsiazki.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171226152123_renameofsearchtags")]
+    partial class renameofsearchtags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,13 +42,13 @@ namespace UzywaneKsiazki.Migrations
 
                     b.Property<string>("PublishDate");
 
-                    b.Property<string>("SearchTags");
-
                     b.Property<string>("StateOfBook");
 
                     b.Property<string>("Telephone");
 
                     b.Property<string>("Title");
+
+                    b.Property<string>("TitleQuery");
 
                     b.HasKey("Id");
 

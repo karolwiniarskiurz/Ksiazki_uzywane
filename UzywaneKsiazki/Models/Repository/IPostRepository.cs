@@ -1,5 +1,6 @@
 namespace UzywaneKsiazki.Models.Repository
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -11,6 +12,12 @@ namespace UzywaneKsiazki.Models.Repository
 
         IEnumerable<PostModel> GetAll();
 
-        IEnumerable<PostModel> GetByTitle(string title);
+        IEnumerable<PostModel> GetBySearchQuery(string searchQuery, int pageNumber);
+
+        void AddPost(PostModel post);
+
+        void DeletePost(Guid id);
+
+        void UpdatePost(PostModel post);
     }
 }
