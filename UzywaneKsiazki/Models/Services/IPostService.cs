@@ -13,7 +13,7 @@
 
         IEnumerable<PostModelDTO> GetAll();
 
-        IEnumerable<PostModelDTO> GetByTitle(string title);
+        IEnumerable<PostModelDTO> GetBySearchQuery(string searchQuery, int pageNumber);
 
         void AddPost(PostModelDTO post);
 

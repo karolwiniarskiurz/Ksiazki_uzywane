@@ -3,12 +3,16 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
+    using UzywaneKsiazki.Extensions;
     using UzywaneKsiazki.Models.DomainModels;
 
     public class EfPostsRepository : IPostRepository
     {
         private ApplicationDbContext context;
+
+        private int itemsPerPage = 15;
 
         public EfPostsRepository(ApplicationDbContext context)
         {
@@ -19,10 +23,17 @@
 
         public IEnumerable<PostModel> GetAll() => this.Posts;
 
-        // todo zrob lepsze query
-        public IEnumerable<PostModel> GetByTitle(string title) => this.Posts.Where(p => p.Title.Contains(title));
+        // todo zrob lepsze query przetestuj paginacje
+        public IEnumerable<PostModel> GetBySearchQuery(string searchQuery, int pageNumber) => this.Posts
+            .Where(p => p.SearchTags.Contains(searchQuery)).OrderBy(p => p.Id).Skip((pageNumber - 1) * this.itemsPerPage)
+            .Take(this.itemsPerPage);
 
-        public void AddPost(PostModel post) => this.context.Add(post);
+        public void AddPost(PostModel post)
+        {
+            this.context.Add(post);
+            this.context.SaveChanges();
+
+        }
 
         public void DeletePost(Guid id)
         {

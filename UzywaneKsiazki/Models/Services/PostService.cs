@@ -9,6 +9,7 @@ namespace UzywaneKsiazki.Models.Services
 
     using Remotion.Linq.Clauses;
 
+    using UzywaneKsiazki.Extensions;
     using UzywaneKsiazki.Models.DomainModels;
     using UzywaneKsiazki.Models.DTO;
     using UzywaneKsiazki.Models.Repository;
@@ -18,6 +19,8 @@ namespace UzywaneKsiazki.Models.Services
         private IPostRepository repository;
 
         private IMapper mapper;
+
+
 
         public PostService(IPostRepository repository, IMapper mapper)
         {
@@ -33,16 +36,21 @@ namespace UzywaneKsiazki.Models.Services
             return this.mapper.Map<IEnumerable<PostModel>, IEnumerable<PostModelDTO>>(posts);
         }
 
-        public IEnumerable<PostModelDTO> GetByTitle(string title)
+        public IEnumerable<PostModelDTO> GetBySearchQuery(string searchQuery, int pageNumber)
         {
-            var posts = this.repository.GetByTitle(title);
+            searchQuery = searchQuery.RemoveSpacesAndSpecialMarks();
+            var posts = this.repository.GetBySearchQuery(searchQuery, pageNumber);
             return this.mapper.Map<IEnumerable<PostModel>, IEnumerable<PostModelDTO>>(posts);
         }
 
         // todo przetestowac te nizej !!IMPORTANT
         public void AddPost(PostModelDTO post)
         {
-            this.repository.AddPost(this.mapper.Map<PostModelDTO, PostModel>(post));
+            var postModel = this.mapper.Map<PostModelDTO, PostModel>(post);
+            //            postModel.Id = Guid.NewGuid();
+            postModel.DateOfPosting = DateTime.Now;
+            postModel.SearchTags = post.Title.RemoveSpacesAndSpecialMarks();
+            this.repository.AddPost(postModel);
         }
 
         public void DeletePost(Guid id)
