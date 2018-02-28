@@ -1,7 +1,9 @@
-﻿namespace UzywaneKsiazki.Controllers
+﻿using System.Threading.Tasks;
+using UzywaneKsiazki.Helpers.Exceptions;
+
+namespace UzywaneKsiazki.Controllers
 {
     using System;
-
     using Microsoft.AspNetCore.Mvc;
     using UzywaneKsiazki.Models.DTO;
     using UzywaneKsiazki.Models.Services;
@@ -15,37 +17,76 @@
         {
             this.service = service;
         }
-
-        //todo remove this is strictly for development porpouses
-        [HttpGet]
+        
+#if DEBUG
+        [HttpGet("/get/all")]
         public IActionResult GetAll()
         {
-            return this.Json(this.service.GetAll());
+            return Ok(this.service.GetAll());
+        }
+#endif
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            try
+            {
+                var post = await this.service.GetByIdAsync(id);
+                return Ok(post);
+            }
+            catch (PostNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         //todo zmien sciezke na cos w stylu /szukaj/fraza/strona
         [HttpGet("search/{page}/{searchQuery}")]
-        public IActionResult GetBySearchQuery(string searchQuery, int page)
+        public async Task<IActionResult> GetBySearchQuery(string searchQuery, int page)
         {
-            return this.Json(this.service.GetBySearchQuery(searchQuery, page));
+            return Ok(await this.service.GetBySearchQueryAsync(searchQuery, page));
         }
 
         [HttpPost]
-        public void AddPost([FromBody] PostModelDTO model)
+        public async Task<IActionResult> Add([FromBody] PostModelDTO model)
         {
-            this.service.AddPost(model);
+            try
+            {
+                await this.service.AddPostAsync(model);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpDelete("delete/{id}")]
-        public void DeletePost(Guid id)
+        public async Task<IActionResult> DeletePost(int id)
         {
-            this.service.DeletePost(id);
+            try
+            {
+                await this.service.DeletePostAsync(id);
+                return Ok();
+            }
+            catch (PostNotFoundException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
-        [HttpPut]
-        public void UpdatePost([FromBody] PostModelDTO model)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdatePost([FromBody] PostModelDTO model)
         {
-            this.service.UpdatePost(model);
+            try
+            {
+                await this.service.UpdatePostAsync(model);
+                return Ok();
+            }
+            catch (PostNotFoundException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }

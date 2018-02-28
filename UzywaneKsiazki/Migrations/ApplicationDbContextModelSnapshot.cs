@@ -17,12 +17,11 @@ namespace UzywaneKsiazki.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
             modelBuilder.Entity("UzywaneKsiazki.Models.DomainModels.PostModel", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Adress");
@@ -35,9 +34,11 @@ namespace UzywaneKsiazki.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("Email");
+
                     b.Property<string>("PhotosDb");
 
-                    b.Property<decimal?>("Price");
+                    b.Property<decimal>("Price");
 
                     b.Property<string>("PublishDate");
 

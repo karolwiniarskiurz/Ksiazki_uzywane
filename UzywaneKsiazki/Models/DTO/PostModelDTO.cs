@@ -4,7 +4,7 @@ namespace UzywaneKsiazki.Models.DTO
 {
     public class PostModelDTO
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string AuthorName { get; set; }
 
@@ -12,6 +12,8 @@ namespace UzywaneKsiazki.Models.DTO
 
         public string Telephone { get; set; }
 
+        public string Email { get; set; }
+        
         public string Adress { get; set; }
 
         public string[] Photos { get; set; }
@@ -26,6 +28,6 @@ namespace UzywaneKsiazki.Models.DTO
 
         public string PublishDate { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
     }
 }

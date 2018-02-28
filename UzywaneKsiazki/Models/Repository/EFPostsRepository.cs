@@ -1,11 +1,11 @@
-﻿namespace UzywaneKsiazki.Models.Repository
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Extensions.Internal;
+
+namespace UzywaneKsiazki.Models.Repository
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-
-    using UzywaneKsiazki.Extensions;
     using UzywaneKsiazki.Models.DomainModels;
 
     public class EfPostsRepository : IPostRepository
@@ -21,26 +21,40 @@
 
         public IQueryable<PostModel> Posts => this.context.Posts;
 
-        public IEnumerable<PostModel> GetAll() => this.Posts;
+        public async Task<PostModel> GetByIdAsync(int id)
+        {
+            return await this.context.Posts.SingleOrDefaultAsync(post => post.Id == id);
+        }
+
+#if DEBUG
+        public async Task<IEnumerable<PostModel>> GetAllAsync() => this.Posts;
+#endif
 
         // todo zrob lepsze query przetestuj paginacje
-        public IEnumerable<PostModel> GetBySearchQuery(string searchQuery, int pageNumber) => this.Posts
-            .Where(p => p.SearchTags.Contains(searchQuery)).OrderBy(p => p.Id).Skip((pageNumber - 1) * this.itemsPerPage)
-            .Take(this.itemsPerPage);
+        public async Task<IEnumerable<PostModel>> GetBySearchQueryAsync(string searchQuery, int pageNumber) =>
+            this.context.Posts
+                .Where(p => p.SearchTags.Contains(searchQuery))
+                .OrderBy(p => p.Id)
+                .Skip((pageNumber - 1) * this.itemsPerPage)
+                .Take(this.itemsPerPage);
 
-        public void AddPost(PostModel post)
+        public async Task AddPostAsync(PostModel post)
         {
-            this.context.Add(post);
-            this.context.SaveChanges();
-
+            await this.context.AddAsync(post);
+            await this.context.SaveChangesAsync();
         }
 
-        public void DeletePost(Guid id)
+        public async Task DeletePostAsync(int id)
         {
-            var post = this.Posts.Where(p => p.Id == id);
+            var post = await this.Posts.SingleAsync(p => p.Id == id);
             this.context.Remove(post);
+            await this.context.SaveChangesAsync();
         }
 
-        public void UpdatePost(PostModel post) => this.context.Update(post);
+        public async Task UpdatePostAsync(PostModel post)
+        {
+            this.context.Update(post);
+            await this.context.SaveChangesAsync();
+        }
     }
 }

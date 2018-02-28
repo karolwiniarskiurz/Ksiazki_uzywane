@@ -6,11 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace UzywaneKsiazki
 {
     using AutoMapper;
-
     using Microsoft.EntityFrameworkCore;
-
     using Newtonsoft.Json;
-
     using UzywaneKsiazki.Models.Mapper;
     using UzywaneKsiazki.Models.Repository;
     using UzywaneKsiazki.Models.Services;
@@ -28,8 +25,11 @@ namespace UzywaneKsiazki
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            //todo moze zrobic ze rozna baza zalezna od enviromement
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(this.Configuration["Data:KsiazkiPosts:ConnectionString"]));
+                options => options.UseSqlite(this.Configuration["Data:KsiazkiPosts:ConnectionString"]));
+            
 
             // IoC IRepository -> EFRepository
             services.AddTransient<IPostRepository, EfPostsRepository>();
@@ -50,7 +50,12 @@ namespace UzywaneKsiazki
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
             app.UseMvc();
-            DataSeed.Populate(app);
+            if (env.IsDevelopment())
+            {
+                DataSeed.Populate(app);
+            }
+            
+
         }
     }
 }

@@ -1,24 +1,27 @@
-﻿namespace UzywaneKsiazki.Models.Services
+﻿using System.Threading.Tasks;
+
+namespace UzywaneKsiazki.Models.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using UzywaneKsiazki.Models.DomainModels;
     using UzywaneKsiazki.Models.DTO;
 
     public interface IPostService
     {
-        IQueryable<PostModelDTO> Posts { get; }
+        Task<PostModelDTO> GetByIdAsync(int id);
 
+        Task<IEnumerable<PostModelDTO>> GetBySearchQueryAsync(string searchQuery, int pageNumber);
+
+        Task AddPostAsync(PostModelDTO post);
+
+        Task DeletePostAsync(int id);
+
+        Task UpdatePostAsync(PostModelDTO post);
+
+#if DEBUG
         IEnumerable<PostModelDTO> GetAll();
-
-        IEnumerable<PostModelDTO> GetBySearchQuery(string searchQuery, int pageNumber);
-
-        void AddPost(PostModelDTO post);
-
-        void DeletePost(Guid id);
-
-        void UpdatePost(PostModelDTO post);
+#endif
     }
 }

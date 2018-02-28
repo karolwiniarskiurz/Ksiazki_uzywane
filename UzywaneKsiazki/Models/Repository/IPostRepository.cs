@@ -1,23 +1,24 @@
+using System.Threading.Tasks;
+
 namespace UzywaneKsiazki.Models.Repository
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using UzywaneKsiazki.Models.DomainModels;
 
     public interface IPostRepository
     {
         IQueryable<PostModel> Posts { get; }
 
-        IEnumerable<PostModel> GetAll();
+        Task<PostModel> GetByIdAsync(int id);
 
-        IEnumerable<PostModel> GetBySearchQuery(string searchQuery, int pageNumber);
+        Task<IEnumerable<PostModel>> GetBySearchQueryAsync(string searchQuery, int pageNumber);
 
-        void AddPost(PostModel post);
+        Task AddPostAsync(PostModel post);
 
-        void DeletePost(Guid id);
+        Task DeletePostAsync(int id);
 
-        void UpdatePost(PostModel post);
+        Task UpdatePostAsync(PostModel post);
     }
 }

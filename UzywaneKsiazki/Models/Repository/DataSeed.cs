@@ -26,7 +26,8 @@
                         BookAuthor = "Davies Norman",
                         DateOfPosting = DateTime.Now,
                         Description = "Najciekawsza podróż to podróż przez historię.",
-                        Id = Guid.NewGuid(),
+                        Id = 1,
+                        Email = "dupa123@xd.pl",
                         Photos =
                                 new[]
                                     {
