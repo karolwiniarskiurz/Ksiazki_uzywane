@@ -8,7 +8,7 @@ namespace UzywaneKsiazki.Controllers
     using UzywaneKsiazki.Models.DTO;
     using UzywaneKsiazki.Models.Services;
 
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PostController : Controller
     {
         private IPostService service;
@@ -17,14 +17,7 @@ namespace UzywaneKsiazki.Controllers
         {
             this.service = service;
         }
-        
-#if DEBUG
-        [HttpGet("/get/all")]
-        public IActionResult GetAll()
-        {
-            return Ok(this.service.GetAll());
-        }
-#endif
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
@@ -41,7 +34,7 @@ namespace UzywaneKsiazki.Controllers
         }
 
         //todo zmien sciezke na cos w stylu /szukaj/fraza/strona
-        [HttpGet("search/{page}/{searchQuery}")]
+        [HttpGet("search/{searchQuery}/{page}")]
         public async Task<IActionResult> GetBySearchQuery(string searchQuery, int page)
         {
             return Ok(await this.service.GetBySearchQueryAsync(searchQuery, page));
@@ -88,5 +81,13 @@ namespace UzywaneKsiazki.Controllers
                 return BadRequest(exception.Message);
             }
         }
+
+#if DEBUG
+        [HttpGet("/get/all")]
+        public IActionResult GetAll()
+        {
+            return Ok(this.service.GetAll());
+        }
+#endif
     }
 }

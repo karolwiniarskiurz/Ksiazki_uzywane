@@ -25,11 +25,10 @@ namespace UzywaneKsiazki
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            //todo moze zrobic ze rozna baza zalezna od enviromement
+#if DEBUG
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlite(this.Configuration["Data:KsiazkiPosts:ConnectionString"]));
-            
+#endif
 
             // IoC IRepository -> EFRepository
             services.AddTransient<IPostRepository, EfPostsRepository>();
@@ -54,8 +53,6 @@ namespace UzywaneKsiazki
             {
                 DataSeed.Populate(app);
             }
-            
-
         }
     }
 }
