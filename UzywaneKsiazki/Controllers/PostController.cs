@@ -34,8 +34,8 @@ namespace UzywaneKsiazki.Controllers
         }
 
         //todo zmien sciezke na cos w stylu /szukaj/fraza/strona
-        [HttpGet("search/{searchQuery}/{page}")]
-        public async Task<IActionResult> GetBySearchQuery(string searchQuery, int page)
+        [HttpGet("search/{searchQuery}/{page?}")]
+        public async Task<IActionResult> GetBySearchQuery(string searchQuery, int page = 1)
         {
             return Ok(await this.service.GetBySearchQueryAsync(searchQuery, page));
         }
