@@ -66,11 +66,9 @@ namespace UzywaneKsiazki.Models.Services
         {
             await IsPostWithGivenIdValidElseThrowException(post.Id);
             var postMapped = this.mapper.Map<PostModelDTO, PostModel>(post);
+            postMapped.GenerateValues();
             await this.repository.UpdatePostAsync(postMapped);
         }
-
-
-        
 
         private async Task IsPostWithGivenIdValidElseThrowException(int id)
         {

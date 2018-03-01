@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Extensions.Internal;
 
 namespace UzywaneKsiazki.Models.Repository
 {
@@ -13,7 +12,7 @@ namespace UzywaneKsiazki.Models.Repository
         private ApplicationDbContext context;
 
         private int itemsPerPage = 15;
-
+        
         public EfPostsRepository(ApplicationDbContext context)
         {
             this.context = context;
@@ -53,7 +52,9 @@ namespace UzywaneKsiazki.Models.Repository
 
         public async Task UpdatePostAsync(PostModel post)
         {
-            this.context.Update(post);
+            var original = await this.context.Posts.SingleOrDefaultAsync(p => p.Id == post.Id);
+            AutoMapper.Mapper.Map(post, original);
+            this.context.Posts.Update(original);
             await this.context.SaveChangesAsync();
         }
     }
