@@ -46,6 +46,13 @@ namespace UzywaneKsiazki
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
+            app.UseCors(x =>
+            {
+                x.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
             app.UseMvc();
             if (env.IsDevelopment())
             {
