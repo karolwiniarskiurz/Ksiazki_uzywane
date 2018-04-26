@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using UzywaneKsiazki.Helpers.Exceptions;
 
@@ -35,11 +36,13 @@ namespace UzywaneKsiazki.Models.Services
             return postDTO;
         }
 
-        public async Task<IEnumerable<PostModelDTO>> GetBySearchQueryAsync(string searchQuery, int pageNumber)
+        public async Task<SearchResultsDTO> GetBySearchQueryAsync(string searchQuery, int pageNumber)
         {
             searchQuery = searchQuery.RemoveSpacesAndSpecialMarks();
-            var posts = await this.repository.GetBySearchQueryAsync(searchQuery, pageNumber);
-            return this.mapper.Map<IEnumerable<PostModel>, IEnumerable<PostModelDTO>>(posts);
+            var searchResults = await this.repository.GetBySearchQueryAsync(searchQuery, pageNumber);
+            var mapped = this.mapper.Map<SearchResultsDTO>(searchResults);
+
+            return mapped;
         }
 
         // todo przetestowac te nizej !!IMPORTANT
@@ -48,7 +51,7 @@ namespace UzywaneKsiazki.Models.Services
             var postModel = this.mapper.Map<PostModelDTO, PostModel>(post);
             postModel.CheckValuesOrThrowException();
             postModel.GenerateValues();
-            
+
             await this.repository.AddPostAsync(postModel);
         }
 

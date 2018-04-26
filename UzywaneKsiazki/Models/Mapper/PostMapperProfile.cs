@@ -1,7 +1,6 @@
 ﻿namespace UzywaneKsiazki.Models.Mapper
 {
     using AutoMapper;
-
     using UzywaneKsiazki.Models.DomainModels;
     using UzywaneKsiazki.Models.DTO;
 
@@ -11,6 +10,7 @@
         {
             this.CreateMap<PostModel, PostModelDTO>();
             this.CreateMap<PostModelDTO, PostModel>();
+            this.CreateMap<SearchResults, SearchResultsDTO>();
         }
     }
 }

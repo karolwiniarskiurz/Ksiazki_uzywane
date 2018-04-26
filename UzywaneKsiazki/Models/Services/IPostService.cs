@@ -12,7 +12,7 @@ namespace UzywaneKsiazki.Models.Services
     {
         Task<PostModelDTO> GetByIdAsync(int id);
 
-        Task<IEnumerable<PostModelDTO>> GetBySearchQueryAsync(string searchQuery, int pageNumber);
+        Task<SearchResultsDTO> GetBySearchQueryAsync(string searchQuery, int pageNumber);
 
         Task AddPostAsync(PostModelDTO post);
 

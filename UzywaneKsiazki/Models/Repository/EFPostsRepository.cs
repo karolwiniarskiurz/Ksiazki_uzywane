@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using UzywaneKsiazki.Models.DTO;
 
 namespace UzywaneKsiazki.Models.Repository
 {
@@ -12,7 +14,7 @@ namespace UzywaneKsiazki.Models.Repository
         private ApplicationDbContext context;
 
         private int itemsPerPage = 15;
-        
+
         public EfPostsRepository(ApplicationDbContext context)
         {
             this.context = context;
@@ -30,12 +32,18 @@ namespace UzywaneKsiazki.Models.Repository
 #endif
 
         // todo zrob lepsze query przetestuj paginacje
-        public async Task<IEnumerable<PostModel>> GetBySearchQueryAsync(string searchQuery, int pageNumber) =>
-            this.context.Posts
+        public async Task<SearchResults> GetBySearchQueryAsync(string searchQuery, int pageNumber)
+        {
+            var posts = this.context.Posts
                 .Where(p => p.SearchTags.Contains(searchQuery))
                 .OrderBy(p => p.Id)
                 .Skip((pageNumber - 1) * this.itemsPerPage)
                 .Take(this.itemsPerPage);
+            var numberOfItems = this.context.Posts.Count(p => p.SearchTags.Contains(searchQuery));
+            var totalPages = (int) Math.Ceiling(numberOfItems / (double) itemsPerPage);
+            
+            return new SearchResults(pageNumber, totalPages, itemsPerPage, posts);
+        }
 
         public async Task AddPostAsync(PostModel post)
         {

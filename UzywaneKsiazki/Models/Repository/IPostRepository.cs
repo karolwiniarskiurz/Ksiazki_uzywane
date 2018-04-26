@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using UzywaneKsiazki.Models.DTO;
 
 namespace UzywaneKsiazki.Models.Repository
 {
@@ -13,7 +14,7 @@ namespace UzywaneKsiazki.Models.Repository
 
         Task<PostModel> GetByIdAsync(int id);
 
-        Task<IEnumerable<PostModel>> GetBySearchQueryAsync(string searchQuery, int pageNumber);
+        Task<SearchResults> GetBySearchQueryAsync(string searchQuery, int pageNumber);
 
         Task AddPostAsync(PostModel post);
 
