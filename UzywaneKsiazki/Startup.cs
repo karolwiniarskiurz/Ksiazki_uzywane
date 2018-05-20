@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using UzywaneKsiazki.Helpers;
 
 namespace UzywaneKsiazki
 {
@@ -30,14 +34,53 @@ namespace UzywaneKsiazki
 
             // IoC IRepository -> EFRepository
             services.AddTransient<IPostRepository, EfPostsRepository>();
+            services.AddTransient<IUserRepository, EfUserRepository>();
 
             // IoC IPostService -> PostService
             services.AddTransient<IPostService, PostService>();
+            services.AddTransient<IAuthService, AuthService>();
+
 
             // AutoMapper
             services.AddAutoMapper();
 
             services.AddMvc().AddJsonOptions(x => x.SerializerSettings.Formatting = Formatting.Indented);
+
+            //jwt
+
+            var appSettingsSection = Configuration.GetSection("Auth");
+            services.Configure<AppSettingsSecret>(appSettingsSection);
+
+
+            var appSettings = appSettingsSection.Get<AppSettingsSecret>();
+            var key = Encoding.ASCII.GetBytes(appSettings.SecretCode);
+
+            services.AddTransient<Auth>(service => new Auth(appSettings));
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+            // tutaj mozemy dodac nasze wlasne wymogi dot. zawartości tokena
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("CustomClaim", policy=> policy.RequireClaim("CustomClaim", "moge tutaj wpisac co chce :)"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +96,8 @@ namespace UzywaneKsiazki
                     .AllowAnyHeader()
                     .AllowCredentials();
             });
+            // jwt
+            app.UseAuthentication();
             app.UseMvc();
             if (env.IsDevelopment())
             {

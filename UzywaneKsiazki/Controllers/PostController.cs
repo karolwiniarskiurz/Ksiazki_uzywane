@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using UzywaneKsiazki.Helpers.Exceptions;
 
 namespace UzywaneKsiazki.Controllers
@@ -40,6 +41,8 @@ namespace UzywaneKsiazki.Controllers
             return Ok(await this.service.GetBySearchQueryAsync(searchQuery, page));
         }
 
+        [Authorize("Admin")]
+        [Authorize("CustomClaim")]
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] PostModelDTO model)
         {
